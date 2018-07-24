@@ -24,4 +24,5 @@
         <attr name="end_angle" format="float"/>
         <attr name="circle_fill" format="color"/>
     </declare-styleable>
-    </resources>
+
+</resources>

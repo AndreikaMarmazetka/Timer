@@ -10,16 +10,14 @@
     tools:layout_editor_absoluteY="25dp">
 
 
-    <com.example.apopov.timer.src.view.activity.CircularSeekBar
-        android:id="@+id/circularSeekBar"
-        tools:contextClickable="true"
-        android:layout_width="267dp"
-        android:layout_height="322dp"
+    <com.example.apopov.timer.CircularSeekBar
+        android:id="@+id/circularSeekBar2"
+        android:layout_width="201dp"
+        android:layout_height="255dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.418" />
 </android.support.constraint.ConstraintLayout>

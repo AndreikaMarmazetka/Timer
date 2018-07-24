@@ -1,4 +1,5 @@
-package com.example.apopov.timer.src.view.activity;
+package com.example.apopov.timer;
+import com.example.apopov.timer.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,14 +16,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.apopov.timer.R;
+
 
 public class CircularSeekBar extends View {
 
 
     protected final float DPTOPX_SCALE = getResources().getDisplayMetrics().density;
 
- 
     protected final float MIN_TOUCH_TARGET_DP = 48;
 
     // Default values
@@ -32,8 +32,8 @@ public class CircularSeekBar extends View {
     protected static final float DEFAULT_POINTER_HALO_WIDTH = 6f;
     protected static final float DEFAULT_POINTER_HALO_BORDER_WIDTH = 2f;
     protected static final float DEFAULT_CIRCLE_STROKE_WIDTH = 5f;
-    protected static final float DEFAULT_START_ANGLE = 270f;
-    protected static final float DEFAULT_END_ANGLE = 270f;
+    protected static final float DEFAULT_START_ANGLE = 270f; // Geometric (clockwise, relative to 3 o'clock)
+    protected static final float DEFAULT_END_ANGLE = 270f; // Geometric (clockwise, relative to 3 o'clock)
     protected static final int DEFAULT_MAX = 100;
     protected static final int DEFAULT_PROGRESS = 0;
     protected static final int DEFAULT_CIRCLE_COLOR = Color.DKGRAY;
@@ -52,156 +52,105 @@ public class CircularSeekBar extends View {
 
     protected Paint mCirclePaint;
 
-
     protected Paint mCircleFillPaint;
-
 
     protected Paint mCircleProgressPaint;
 
-
     protected Paint mCircleProgressGlowPaint;
-
 
     protected Paint mPointerPaint;
 
-
     protected Paint mPointerHaloPaint;
-
 
     protected Paint mPointerHaloBorderPaint;
 
-
     protected float mCircleStrokeWidth;
-
 
     protected float mCircleXRadius;
 
-
     protected float mCircleYRadius;
-
 
     protected float mPointerRadius;
 
-
     protected float mPointerHaloWidth;
-
 
     protected float mPointerHaloBorderWidth;
 
-
     protected float mStartAngle;
-
 
     protected float mEndAngle;
 
-
     protected RectF mCircleRectF = new RectF();
-
 
     protected int mPointerColor = DEFAULT_POINTER_COLOR;
 
-
     protected int mPointerHaloColor = DEFAULT_POINTER_HALO_COLOR;
-
 
     protected int mPointerHaloColorOnTouch = DEFAULT_POINTER_HALO_COLOR_ONTOUCH;
 
-
     protected int mCircleColor = DEFAULT_CIRCLE_COLOR;
-
 
     protected int mCircleFillColor = DEFAULT_CIRCLE_FILL_COLOR;
 
-
     protected int mCircleProgressColor = DEFAULT_CIRCLE_PROGRESS_COLOR;
-
 
     protected int mPointerAlpha = DEFAULT_POINTER_ALPHA;
 
-
     protected int mPointerAlphaOnTouch = DEFAULT_POINTER_ALPHA_ONTOUCH;
-
 
     protected float mTotalCircleDegrees;
 
-
     protected float mProgressDegrees;
-
 
     protected Path mCirclePath;
 
-
     protected Path mCircleProgressPath;
-
 
     protected int mMax;
 
-
     protected int mProgress;
-
 
     protected boolean mCustomRadii;
 
-
     protected boolean mMaintainEqualCircle;
-
 
     protected boolean mMoveOutsideCircle;
 
-
     protected boolean lockEnabled = true;
-
 
     protected boolean lockAtStart = true;
 
-
     protected boolean lockAtEnd = false;
-
 
     protected boolean mUserIsMovingPointer = false;
 
-
     protected float cwDistanceFromStart;
-
 
     protected float ccwDistanceFromStart;
 
-
     protected float cwDistanceFromEnd;
 
-
-    @SuppressWarnings("unused")
     protected float ccwDistanceFromEnd;
-
 
     protected float lastCWDistanceFromStart;
 
-
     protected float cwDistanceFromPointer;
-
 
     protected float ccwDistanceFromPointer;
 
-
     protected boolean mIsMovingCW;
-
 
     protected float mCircleWidth;
 
-
     protected float mCircleHeight;
-
 
     protected float mPointerPosition;
 
-
     protected float[] mPointerPositionXY = new float[2];
-
 
     protected OnCircularSeekBarChangeListener mOnCircularSeekBarChangeListener;
 
     protected boolean isTouchEnabled = true;
-
 
     protected void initAttributes(TypedArray attrArray) {
         mCircleXRadius = attrArray.getDimension(R.styleable.CircularSeekBar_circle_x_radius, DEFAULT_CIRCLE_X_RADIUS * DPTOPX_SCALE);
@@ -241,7 +190,6 @@ public class CircularSeekBar extends View {
             mEndAngle = mEndAngle - .1f;
         }
     }
-
 
     protected void initPaints() {
         mCirclePaint = new Paint();
@@ -292,7 +240,6 @@ public class CircularSeekBar extends View {
 
     }
 
-
     protected void calculateTotalDegrees() {
         mTotalCircleDegrees = (360f - (mStartAngle - mEndAngle)) % 360f; // Length of the entire circle/arc
         if (mTotalCircleDegrees <= 0f) {
@@ -300,15 +247,13 @@ public class CircularSeekBar extends View {
         }
     }
 
-
     protected void calculateProgressDegrees() {
         mProgressDegrees = mPointerPosition - mStartAngle; // Verified
         mProgressDegrees = (mProgressDegrees < 0 ? 360f + mProgressDegrees : mProgressDegrees); // Verified
     }
 
-
     protected void calculatePointerAngle() {
-        float progressPercent = ((float) mProgress / (float) mMax);
+        float progressPercent = ((float)mProgress / (float)mMax);
         mPointerPosition = (progressPercent * mTotalCircleDegrees) + mStartAngle;
         mPointerPosition = mPointerPosition % 360f;
     }
@@ -322,7 +267,6 @@ public class CircularSeekBar extends View {
         }
     }
 
-
     protected void initPaths() {
         mCirclePath = new Path();
         mCirclePath.addArc(mCircleRectF, mStartAngle, mTotalCircleDegrees);
@@ -330,7 +274,6 @@ public class CircularSeekBar extends View {
         mCircleProgressPath = new Path();
         mCircleProgressPath.addArc(mCircleRectF, mStartAngle, mProgressDegrees);
     }
-
 
     protected void initRects() {
         mCircleRectF.set(-mCircleWidth, -mCircleHeight, mCircleWidth, mCircleHeight);
@@ -355,12 +298,10 @@ public class CircularSeekBar extends View {
         }
     }
 
-
     public int getProgress() {
-        int progress = Math.round((float) mMax * mProgressDegrees / mTotalCircleDegrees);
+        int progress = Math.round((float)mMax * mProgressDegrees / mTotalCircleDegrees);
         return progress;
     }
-
 
     public void setProgress(int progress) {
         if (mProgress != progress) {
@@ -377,7 +318,7 @@ public class CircularSeekBar extends View {
     protected void setProgressBasedOnAngle(float angle) {
         mPointerPosition = angle;
         calculateProgressDegrees();
-        mProgress = Math.round((float) mMax * mProgressDegrees / mTotalCircleDegrees);
+        mProgress = Math.round((float)mMax * mProgressDegrees / mTotalCircleDegrees);
     }
 
     protected void recalculateAll() {
@@ -403,13 +344,13 @@ public class CircularSeekBar extends View {
             setMeasuredDimension(width, height);
         }
 
+        // Set the circle width and height based on the view for the moment
+        mCircleHeight = (float)height / 2f - mCircleStrokeWidth - mPointerRadius - (mPointerHaloBorderWidth * 1.5f);
+        mCircleWidth = (float)width / 2f - mCircleStrokeWidth - mPointerRadius - (mPointerHaloBorderWidth * 1.5f);
 
-        mCircleHeight = (float) height / 2f - mCircleStrokeWidth - mPointerRadius - (mPointerHaloBorderWidth * 1.5f);
-        mCircleWidth = (float) width / 2f - mCircleStrokeWidth - mPointerRadius - (mPointerHaloBorderWidth * 1.5f);
-
-
+        // If it is not set to use custom
         if (mCustomRadii) {
-
+            // Check to make sure the custom radii are not out of the view. If they are, just use the view values
             if ((mCircleYRadius - mCircleStrokeWidth - mPointerRadius - mPointerHaloBorderWidth) < mCircleHeight) {
                 mCircleHeight = mCircleYRadius - mCircleStrokeWidth - mPointerRadius - (mPointerHaloBorderWidth * 1.5f);
             }
@@ -419,7 +360,7 @@ public class CircularSeekBar extends View {
             }
         }
 
-        if (mMaintainEqualCircle) {
+        if (mMaintainEqualCircle) { // Applies regardless of how the values were determined
             float min = Math.min(mCircleHeight, mCircleWidth);
             mCircleHeight = min;
             mCircleWidth = min;
@@ -439,7 +380,7 @@ public class CircularSeekBar extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isTouchEnabled) {
+        if(!isTouchEnabled){
             return false;
         }
 
@@ -447,51 +388,53 @@ public class CircularSeekBar extends View {
         float x = event.getX() - getWidth() / 2;
         float y = event.getY() - getHeight() / 2;
 
-
+        // Get the distance from the center of the circle in terms of x and y
         float distanceX = mCircleRectF.centerX() - x;
         float distanceY = mCircleRectF.centerY() - y;
 
-
+        // Get the distance from the center of the circle in terms of a radius
         float touchEventRadius = (float) Math.sqrt((Math.pow(distanceX, 2) + Math.pow(distanceY, 2)));
 
-        float minimumTouchTarget = MIN_TOUCH_TARGET_DP * DPTOPX_SCALE;
-        float additionalRadius;
+        float minimumTouchTarget = MIN_TOUCH_TARGET_DP * DPTOPX_SCALE; // Convert minimum touch target into px
+        float additionalRadius; // Either uses the minimumTouchTarget size or larger if the ring/pointer is larger
 
-        if (mCircleStrokeWidth < minimumTouchTarget) {
+        if (mCircleStrokeWidth < minimumTouchTarget) { // If the width is less than the minimumTouchTarget, use the minimumTouchTarget
             additionalRadius = minimumTouchTarget / 2;
-        } else {
-            additionalRadius = mCircleStrokeWidth / 2;
         }
-        float outerRadius = Math.max(mCircleHeight, mCircleWidth) + additionalRadius;
-        float innerRadius = Math.min(mCircleHeight, mCircleWidth) - additionalRadius;
+        else {
+            additionalRadius = mCircleStrokeWidth / 2; // Otherwise use the width
+        }
+        float outerRadius = Math.max(mCircleHeight, mCircleWidth) + additionalRadius; // Max outer radius of the circle, including the minimumTouchTarget or wheel width
+        float innerRadius = Math.min(mCircleHeight, mCircleWidth) - additionalRadius; // Min inner radius of the circle, including the minimumTouchTarget or wheel width
 
-        if (mPointerRadius < (minimumTouchTarget / 2)) {
+        if (mPointerRadius < (minimumTouchTarget / 2)) { // If the pointer radius is less than the minimumTouchTarget, use the minimumTouchTarget
             additionalRadius = minimumTouchTarget / 2;
-        } else {
-            additionalRadius = mPointerRadius;
+        }
+        else {
+            additionalRadius = mPointerRadius; // Otherwise use the radius
         }
 
         float touchAngle;
-        touchAngle = (float) ((java.lang.Math.atan2(y, x) / Math.PI * 180) % 360);
-        touchAngle = (touchAngle < 0 ? 360 + touchAngle : touchAngle);
+        touchAngle = (float) ((java.lang.Math.atan2(y, x) / Math.PI * 180) % 360); // Verified
+        touchAngle = (touchAngle < 0 ? 360 + touchAngle : touchAngle); // Verified
 
-        cwDistanceFromStart = touchAngle - mStartAngle;
-        cwDistanceFromStart = (cwDistanceFromStart < 0 ? 360f + cwDistanceFromStart : cwDistanceFromStart);
-        ccwDistanceFromStart = 360f - cwDistanceFromStart;
+        cwDistanceFromStart = touchAngle - mStartAngle; // Verified
+        cwDistanceFromStart = (cwDistanceFromStart < 0 ? 360f + cwDistanceFromStart : cwDistanceFromStart); // Verified
+        ccwDistanceFromStart = 360f - cwDistanceFromStart; // Verified
 
-        cwDistanceFromEnd = touchAngle - mEndAngle;
-        cwDistanceFromEnd = (cwDistanceFromEnd < 0 ? 360f + cwDistanceFromEnd : cwDistanceFromEnd);
-        ccwDistanceFromEnd = 360f - cwDistanceFromEnd;
+        cwDistanceFromEnd = touchAngle - mEndAngle; // Verified
+        cwDistanceFromEnd = (cwDistanceFromEnd < 0 ? 360f + cwDistanceFromEnd : cwDistanceFromEnd); // Verified
+        ccwDistanceFromEnd = 360f - cwDistanceFromEnd; // Verified
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-
+                // These are only used for ACTION_DOWN for handling if the pointer was the part that was touched
                 float pointerRadiusDegrees = (float) ((mPointerRadius * 180) / (Math.PI * Math.max(mCircleHeight, mCircleWidth)));
                 cwDistanceFromPointer = touchAngle - mPointerPosition;
                 cwDistanceFromPointer = (cwDistanceFromPointer < 0 ? 360f + cwDistanceFromPointer : cwDistanceFromPointer);
                 ccwDistanceFromPointer = 360f - cwDistanceFromPointer;
-
-                if (((touchEventRadius >= innerRadius) && (touchEventRadius <= outerRadius)) && ((cwDistanceFromPointer <= pointerRadiusDegrees) || (ccwDistanceFromPointer <= pointerRadiusDegrees))) {
+                // This is for if the first touch is on the actual pointer.
+                if (((touchEventRadius >= innerRadius) && (touchEventRadius <= outerRadius)) && ( (cwDistanceFromPointer <= pointerRadiusDegrees) || (ccwDistanceFromPointer <= pointerRadiusDegrees)) ) {
                     setProgressBasedOnAngle(mPointerPosition);
                     lastCWDistanceFromStart = cwDistanceFromStart;
                     mIsMovingCW = true;
@@ -505,10 +448,10 @@ public class CircularSeekBar extends View {
                     mUserIsMovingPointer = true;
                     lockAtEnd = false;
                     lockAtStart = false;
-                } else if (cwDistanceFromStart > mTotalCircleDegrees) {
+                } else if (cwDistanceFromStart > mTotalCircleDegrees) { // If the user is touching outside of the start AND end
                     mUserIsMovingPointer = false;
                     return false;
-                } else if ((touchEventRadius >= innerRadius) && (touchEventRadius <= outerRadius)) {
+                } else if ((touchEventRadius >= innerRadius) && (touchEventRadius <= outerRadius)) { // If the user is touching near the circle
                     setProgressBasedOnAngle(touchAngle);
                     lastCWDistanceFromStart = cwDistanceFromStart;
                     mIsMovingCW = true;
@@ -523,7 +466,7 @@ public class CircularSeekBar extends View {
                     mUserIsMovingPointer = true;
                     lockAtEnd = false;
                     lockAtStart = false;
-                } else {
+                } else { // If the user is not touching near the circle
                     mUserIsMovingPointer = false;
                     return false;
                 }
@@ -699,7 +642,6 @@ public class CircularSeekBar extends View {
         mOnCircularSeekBarChangeListener = l;
     }
 
-
     public interface OnCircularSeekBarChangeListener {
 
         public abstract void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser);
@@ -709,18 +651,15 @@ public class CircularSeekBar extends View {
         public abstract void onStartTrackingTouch(CircularSeekBar seekBar);
     }
 
-
     public void setCircleColor(int color) {
         mCircleColor = color;
         mCirclePaint.setColor(mCircleColor);
         invalidate();
     }
 
-
     public int getCircleColor() {
         return mCircleColor;
     }
-
 
     public void setCircleProgressColor(int color) {
         mCircleProgressColor = color;
@@ -728,18 +667,15 @@ public class CircularSeekBar extends View {
         invalidate();
     }
 
-
     public int getCircleProgressColor() {
         return mCircleProgressColor;
     }
-
 
     public void setPointerColor(int color) {
         mPointerColor = color;
         mPointerPaint.setColor(mPointerColor);
         invalidate();
     }
-
 
     public int getPointerColor() {
         return mPointerColor;
@@ -751,37 +687,31 @@ public class CircularSeekBar extends View {
         invalidate();
     }
 
-
     public int getPointerHaloColor() {
         return mPointerHaloColor;
     }
 
-
     public void setPointerAlpha(int alpha) {
-        if (alpha >= 0 && alpha <= 255) {
+        if (alpha >=0 && alpha <= 255) {
             mPointerAlpha = alpha;
             mPointerHaloPaint.setAlpha(mPointerAlpha);
             invalidate();
         }
     }
 
-
     public int getPointerAlpha() {
         return mPointerAlpha;
     }
 
-
     public void setPointerAlphaOnTouch(int alpha) {
-        if (alpha >= 0 && alpha <= 255) {
+        if (alpha >=0 && alpha <= 255) {
             mPointerAlphaOnTouch = alpha;
         }
     }
 
-
     public int getPointerAlphaOnTouch() {
         return mPointerAlphaOnTouch;
     }
-
 
     public void setCircleFillColor(int color) {
         mCircleFillColor = color;
@@ -789,11 +719,9 @@ public class CircularSeekBar extends View {
         invalidate();
     }
 
-
     public int getCircleFillColor() {
         return mCircleFillColor;
     }
-
 
     public void setMax(int max) {
         if (!(max <= 0)) { // Check to make sure it's greater than zero
@@ -810,11 +738,9 @@ public class CircularSeekBar extends View {
         }
     }
 
-
     public synchronized int getMax() {
         return mMax;
     }
-
 
     public void setIsTouchEnabled(boolean isTouchEnabled) {
         this.isTouchEnabled = isTouchEnabled;
@@ -823,5 +749,5 @@ public class CircularSeekBar extends View {
     public boolean getIsTouchEnabled() {
         return isTouchEnabled;
     }
-}
 
+}
