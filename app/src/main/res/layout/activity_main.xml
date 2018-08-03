@@ -26,8 +26,8 @@
 
             <TextView
                 android:id="@+id/tvViewTime"
-                android:layout_width="47dp"
-                android:layout_height="33dp"
+                android:layout_width="60dp"
+                android:layout_height="36dp"
                 android:text="0:00"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/button2"
@@ -86,7 +86,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/play"
+                android:id="@+id/startStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Play"

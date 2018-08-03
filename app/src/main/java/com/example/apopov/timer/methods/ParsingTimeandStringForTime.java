@@ -1,6 +1,12 @@
 package com.example.apopov.timer.methods;
 
-public class Methods {
+import java.sql.Date;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+public class ParsingTimeandStringForTime {
 
 
     public String StringForTextViewTimer(int progress, int hours){
@@ -34,6 +40,18 @@ public class Methods {
         }
 
         return formatTimer;
+    }
+
+    public Time parsingTime (String str){
+
+        DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+        Time time;
+        try {
+            time = new Time(dateFormat.parse(str).getTime());
+        } catch (ParseException e) {
+            time =  new Time(new Date(0L).getTime());
+        }
+        return time;
     }
 
 }
